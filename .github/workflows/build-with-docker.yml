@@ -1,0 +1,26 @@
+name: Build and publish CoreDNS with Traefik Plugin
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get Go Version
+        id: get-go-version
+        run: echo "goversion=$(cat .go-version)" >> "$GITHUB_OUTPUT"
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ steps.get-go-version.outputs.goversion }}
+      - name: Build CoreDNS
+        env:
+          GOFLAGS: -buildvcs=false
+          COREDNS_PLUGINS: traefik:github.com/scottt732/coredns-traefik
+        run: |
+          make gen
+          make
+      - name: Display Plugins
+        run: |
+          coredns -plugins
