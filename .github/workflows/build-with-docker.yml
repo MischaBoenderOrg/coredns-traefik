@@ -1,4 +1,4 @@
-name: Buil and publish CoreDNS with Traefik Plugin
+name: Build and publish CoreDNS with Traefik Plugin
 on:
   workflow_dispatch:
 
